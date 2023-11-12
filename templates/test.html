@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- 他のヘッダー情報 -->
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    </style>
+</head>
+<body>
+    <div id='map'></div>
+
+    <script>
+        mapboxgl.accessToken = 'YOUR_MAPBOX_ACCESS_TOKEN';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [lng, lat],
+            zoom: 12
+        });
+
+        // 座標のリスト
+        var coordinatesList = [
+            { lng: 139.7514, lat: 35.6852 },
+            { lng: 139.7649, lat: 35.6812 },
+            // 他の座標も追加
+        ];
+
+        // 円の設定
+        var circleRadiusInMeters = 500;
+
+        // 地図上に複数の円を配置
+        map.on('load', function () {
+            coordinatesList.forEach(function (coordinates) {
+                var circleLayerId = 'circle-' + coordinates.lng + '-' + coordinates.lat;
+                map.addLayer({
+                    'id': circleLayerId,
+                    'type': 'circle',
+                    'source': {
+                        'type': 'geojson',
+                        'data': {
+                            'type': 'Point',
+                            'coordinates': [coordinates.lng, coordinates.lat]
+                        }
+                    },
+                    'paint': {
+                        'circle-radius': circleRadiusInMeters,
+                        'circle-color': 'rgba(255, 0, 0, 0.5)',
+                        'circle-stroke-width': 2,
+                        'circle-stroke-color': '#fff'
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
