@@ -1,0 +1,75 @@
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>
+   Accident Prophet - Predicting Road Incidents
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+ <script src="https://cdn.tailwindcss.com"></script></head>
+ <body class="bg-purple-600 text-white">
+  <div class="container mx-auto p-4">
+   <!-- Top Button Bar -->
+   <div class="flex justify-between items-start">
+    <button class="bg-white text-purple-600 font-bold py-2 px-4 rounded-md hover:bg-gray-200 transition duration-300 ease-in-out">
+     Home
+    </button>
+    <button class="bg-white text-purple-600 font-bold py-2 px-4 rounded-md hover:bg-gray-200 transition duration-300 ease-in-out">
+     About
+    </button>
+   </div>
+   <!-- Main Content -->
+   <div class="flex flex-col items-center my-8">
+    <h1 class="text-3xl font-bold my-4">
+     Accident Prophet
+    </h1>
+    <h2 class="text-2xl mb-6">
+     Predicting Road Incidents
+    </h2>
+    <!-- <div class="w-full h-96 bg-gray-100 rounded-lg mb-6" id="map"> -->
+     <!-- Map Placeholder, integrate actual map functionality as per project requirements -->
+    <!-- </div> -->
+
+
+    <div class="text-center px-10 mb-6">
+      <div id="demo-img" align="left">
+        <img src="{{url_for('static', filename='demo.jpg')}}" align="left" style="width:300px;height:400px;" style="margin-right: 100px;"/>
+      </div>
+      <div style="margin-left: 200px;" align="center">
+        <p class="mt-5">
+          Our product is driven by the belief that data-driven decision-making, coupled with the power of machine learning, can significantly enhance the way we understand and manage traffic accidents.
+        </p>
+        <p class="mt-5">
+          "AccidentProphet" harnesses the potential of machine learning and data analytics to unlock valuable patterns and trends within accident records.
+        </p>
+      </div>
+      
+    </div>
+    <!--  -->
+    <div class="col-sm-12 text-center">
+      <a href="#" id="stat" class="bg-white text-purple-600 opacity-75 font-bold py-2 px-4 rounded-full hover:bg-gray-200 hover:opacity-100 transition duration-300 ease-in-out">View Statistics</a>
+       <button id="pred" class="bg-white text-purple-600 opacity-75 font-bold py-2 px-4 rounded-full hover:bg-gray-200 hover:opacity-100 transition duration-300 ease-in-out">Get Prediction</button>
+   </div>
+   <!--  -->
+    <!-- <button class="bg-white text-purple-600 font-bold py-2 px-4 rounded-md hover:bg-gray-200 transition duration-300 ease-in-out mb-8">
+     View Statistics
+    </button> -->
+    <!-- Bottom Right Button -->
+    <!-- <div class="fixed bottom-4 right-4">
+     <button class="bg-white text-purple-600 opacity-75 font-bold py-2 px-4 rounded-full hover:bg-gray-200 hover:opacity-100 transition duration-300 ease-in-out">
+      Get Prediction
+     </button>
+    </div> -->
+   </div>
+   <!-- Footer Note -->
+   <!-- <div class="text-center pb-4"> -->
+    <!-- <p class="text-sm">
+     AIT - Asian Institute of Technology
+    </p> -->
+    <div class="footer-image-logo", align="right", style="margin-right: 100px;">
+      <img src="{{url_for('static', filename='AIT-white-logo.svg')}}" />
+    </div>
+   <!-- </div> -->
+  </div>
+</body>
+</html>

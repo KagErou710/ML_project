@@ -1,0 +1,15 @@
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mlflow
+  mlflow:
+    image: python:3.8-slim
+    command: sh -c "pip install mlflow && mlflow ui"
+    ports:
+      - "5001:5000"
+    volumes:
+      - ./mlflow:/mlflow
