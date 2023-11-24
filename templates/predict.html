@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8' />
+  <title>Mapbox Example</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css' rel='stylesheet' />
+  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js'></script>
+  <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css' type='text/css' />
+  <style>
+    body { margin: 0; padding: 0; }
+    #map { position: absolute; top: 25%; bottom: 0; width: 100%; height: 80%;}
+    #geocoder-container {
+            position: absolute;
+            top: 25%;
+            left: 10px;
+            z-index: 1;
+        }
+    header {
+        background-color: purple;
+        color: white;
+        padding: 20px;
+        text-align: left;
+    }
+
+    .header2 {
+        background-color: purple;
+        color: white;
+        text-align: center;
+    }
+
+    .header3 {
+        background-color: purple;
+        color: white;
+        text-align: right;
+    }
+
+    .button-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 20px;
+    }
+
+    .button-container2 {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 20px;
+    }
+
+    .button1 {
+        margin-bottom: 10px;
+        background-color: yellow;
+        color: black;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+        padding: 20px;
+        border: 2px solid #ffa500;
+    }
+
+    .button2 {
+        margin-bottom: 10px;
+        background-color: yellow;
+        color: black;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+        padding: 20px;
+        border: 2px solid #ff5100;
+    }
+
+    .button3 {
+        margin-bottom: 10px;
+        background-color: yellow;
+        color: black;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+        padding: 20px;
+        border: 2px solid #ffa500;
+        width: 10%;
+    }
+
+    .button4 {
+        margin-bottom: 10px;
+        background-color: yellow;
+        color: black;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+        padding: 20px;
+        border: 2px solid #ff5100;
+        width: 10%;
+    }
+
+    .text-container {
+        padding: 20px;
+        flex: 1; /* 残りのスペースを占める */
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Welcome to AccidentProphet</h1>
+    <div class="header2">
+        <h3>Predicting Road Incidents</h3>
+    </div>
+    <div class="header3">
+        <a href="/" class="button3">home</a>
+        <a href="/test" class="button4">Statistics</a>
+    </div>
+  </header>
+  <main>
+    <div id='map'></div>
+    <div id='geocoder-container'></div>
+  </main>
+  <script>
+    mapboxgl.accessToken = '';//put accessToken here
+    var map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v11', 
+      center: [100.53125, 13.75], 
+      zoom: 12 
+
+    
+    });
+
+    var coordinatesList = [
+            { lng: 100.53125, lat: 13.75 },
+            { lng: 100.54, lat: 13.76 },
+            { lng: 100.55, lat: 13.77 },
+            { lng: 100.56, lat: 13.78 },
+            { lng: 100.57, lat: 13.79 },
+            { lng: 100.58, lat: 13.80 },
+
+        ];
+
+    var geocoder = new MapboxGeocoder({
+            accessToken: mapboxgl.accessToken,
+            mapboxgl: mapboxgl,
+            placeholder: 'Enter a location', // 検索バーのプレースホルダーテキスト
+        });
+
+    document.getElementById('geocoder-container').appendChild(geocoder.onAdd(map));
+
+    geocoder.on('result', function (e) {
+        // 検索結果から座標を取得して地図を移動
+        var coordinates = e.result.center;
+        map.flyTo({
+            center: coordinates,
+            zoom: 12
+        });
+    }); 
+
+      // function displayCoordinates() {
+      // fetch('/get_coordinates')
+      //     .then(response => response.json())
+      //     .then(data => {
+      //         var coordinates = data.coordinates;
+      //         coordinates.forEach(coordinate => {
+      //             new mapboxgl.Marker()
+      //                 .setLngLat(coordinate)
+      //                 .addTo(map);
+      //         });
+      //     })
+      //     .catch(error => console.error('Error fetching coordinates:', error));
+      //   }
+
+    map.on('load', function () {
+      coordinatesList.forEach(function (coordinates) {
+        var circleLayerId = 'circle-' + coordinates.lng + '-' + coordinates.lat;
+        map.addLayer({
+            'id': circleLayerId,
+            'type': 'circle',
+            'source': {
+                'type': 'geojson',
+                'data': {
+                    'type': 'Point',
+                    'coordinates': [coordinates.lng, coordinates.lat]
+                }
+            },
+            'paint': {
+                'circle-radius': 
+                    {
+                        'base': 70,
+                        'stops': [
+                            [8, 7.5],
+                            [11, 15],
+                            [16, 60],
+                            [19, 120],
+                            [22, 180]
+                        ]
+                    }
+                    ,
+                'circle-color': 'rgba(255, 0, 0, 0.4)', 
+                'circle-stroke-color': '#fff'
+            }
+        });
+      });
+    });
+
+  </script>
+</body>
+</html>
+

@@ -22,7 +22,21 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('map.html')
+    return render_template('home.html')
+
+@app.route('/predict')
+def predict_page():
+    return render_template('predict.html')
+
+@app.route('/statistics')
+def statistics_page():
+    return render_template('statistics.html')
+
+@app.route('/test')
+def test_page():
+    return render_template('test.html')
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
