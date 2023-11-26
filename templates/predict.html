@@ -102,10 +102,13 @@
 
     .text-container {
         padding: 20px;
-        flex: 1; /* 残りのスペースを占める */
+        flex: 1;
     }
 
   </style>
+  <script src="https://cdn.tailwindcss.com">
+</script>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
   <header>
@@ -113,9 +116,14 @@
     <div class="header2">
         <h3>Predicting Road Incidents</h3>
     </div>
-    <div class="header3">
-        <a href="/" class="button3">home</a>
-        <a href="/test" class="button4">Statistics</a>
+    
+    <div class="flex justify-between items-start">
+        <a href = "/" class="bg-white text-purple-600 font-bold py-2 px-4 rounded-md hover:bg-gray-200 transition duration-300 ease-in-out">
+         Home
+        </a>
+        <a class="bg-white text-purple-600 font-bold py-2 px-4 rounded-md hover:bg-gray-200 transition duration-300 ease-in-out">
+         About
+        </a>
     </div>
   </header>
   <main>
@@ -123,36 +131,37 @@
     <div id='geocoder-container'></div>
   </main>
   <script>
-    mapboxgl.accessToken = '';//put accessToken here
+    mapboxgl.accessToken = 'pk.eyJ1Ijoia2FnZXJvdS1tYXRjaGEtbGF0dGUiLCJhIjoiY2t2cXFlNmhmMDBpajJ1bHlkeHVxdDFpOCJ9.kzvIYDL7iAoiwrp4Qi_6Kg';//put accessToken here
     var map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11', 
       center: [100.53125, 13.75], 
       zoom: 12 
-
-    
     });
 
-    var coordinatesList = [
-            { lng: 100.53125, lat: 13.75 },
-            { lng: 100.54, lat: 13.76 },
-            { lng: 100.55, lat: 13.77 },
-            { lng: 100.56, lat: 13.78 },
-            { lng: 100.57, lat: 13.79 },
-            { lng: 100.58, lat: 13.80 },
 
-        ];
+    var predicts = {{ predicts | tojson | safe }};
+
+  console.log(predicts);
+
+  var coordinatesList = predicts.map(function(predict) {
+    return {
+      lng: predict[0],
+      lat: predict[1],
+      severity: predict[2]
+    };
+  });
+
 
     var geocoder = new MapboxGeocoder({
             accessToken: mapboxgl.accessToken,
             mapboxgl: mapboxgl,
-            placeholder: 'Enter a location', // 検索バーのプレースホルダーテキスト
+            placeholder: 'Enter a location',
         });
 
     document.getElementById('geocoder-container').appendChild(geocoder.onAdd(map));
 
     geocoder.on('result', function (e) {
-        // 検索結果から座標を取得して地図を移動
         var coordinates = e.result.center;
         map.flyTo({
             center: coordinates,
@@ -160,23 +169,18 @@
         });
     }); 
 
-      // function displayCoordinates() {
-      // fetch('/get_coordinates')
-      //     .then(response => response.json())
-      //     .then(data => {
-      //         var coordinates = data.coordinates;
-      //         coordinates.forEach(coordinate => {
-      //             new mapboxgl.Marker()
-      //                 .setLngLat(coordinate)
-      //                 .addTo(map);
-      //         });
-      //     })
-      //     .catch(error => console.error('Error fetching coordinates:', error));
-      //   }
+    function getColor(severity) {
+        var percentage = severity / 100;
+        var green = 255 - Math.round(255 * percentage);
+        var red = Math.round(255 * percentage);
+        return 'rgba(' + red + ',' + green + ',0,0.4)';
+    }
 
     map.on('load', function () {
       coordinatesList.forEach(function (coordinates) {
         var circleLayerId = 'circle-' + coordinates.lng + '-' + coordinates.lat;
+        var color = getColor(coordinates.severity);
+        console.log(color)
         map.addLayer({
             'id': circleLayerId,
             'type': 'circle',
@@ -200,7 +204,7 @@
                         ]
                     }
                     ,
-                'circle-color': 'rgba(255, 0, 0, 0.4)', 
+                'circle-color': color, 
                 'circle-stroke-color': '#fff'
             }
         });
