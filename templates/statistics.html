@@ -33,87 +33,15 @@
         color: white;
         text-align: center;
     }
-
-    .header3 {
-        background-color: purple;
-        color: white;
-        text-align: right;
-    }
-
-    .button-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: 20px;
-    }
-
-    .button-container2 {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: 20px;
-    }
-
-    .button1 {
-        margin-bottom: 10px;
-        background-color: yellow;
-        color: black;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        cursor: pointer;
-        padding: 20px;
-        border: 2px solid #ffa500;
-    }
-
-    .button2 {
-        margin-bottom: 10px;
-        background-color: yellow;
-        color: black;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        cursor: pointer;
-        padding: 20px;
-        border: 2px solid #ff5100;
-    }
-
-    .button3 {
-        margin-bottom: 10px;
-        background-color: yellow;
-        color: black;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        cursor: pointer;
-        padding: 20px;
-        border: 2px solid #ffa500;
-        width: 10%;
-    }
-
-    .button4 {
-        margin-bottom: 10px;
-        background-color: yellow;
-        color: black;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        cursor: pointer;
-        padding: 20px;
-        border: 2px solid #ff5100;
-        width: 10%;
-    }
-
-    .text-container {
-        padding: 20px;
-        flex: 1; /* 残りのスペースを占める */
-    }
-
-    .left {
-        padding: 20px;
-        flex: 1;
-    }
     
+    .body{
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
 </style>
 <script src="https://cdn.tailwindcss.com">
 </script>
@@ -137,5 +65,8 @@
             </a>
         </div>
     </header>
+    <div class="body">
+        <img src="{{ url_for('static', filename='images/Dashboard 1.png') }}" alt="Sample Image">
+    </div>
 </body>
 </html>
