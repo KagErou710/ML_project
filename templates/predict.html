@@ -130,10 +130,13 @@
       <h1>Execute Python Code</h1>
       <form action="/predict" method="post">
         <label for='latitude'>Latitude:</label>
-        <input type='text' id='latitude' name='latitude'>
+        <input type='text' id='latitude' name='latitude' required>
 
         <label for='user_input'>Longitude:</label>
-        <input type='text' id='longitude' name='longitude'>
+        <input type='text' id='longitude' name='longitude' required>
+
+        <label for='user_input'>Visibility(km):</label>
+        <input type='text' id='visibility' name='visibility' required>
 
         <label for="crossing">crossing?:</label>
         <select id="crossing" name="crossing" >
@@ -158,12 +161,6 @@
             <option value="No">No</option>
             <option value="Yes">Yes</option>
         </select>
-
-        <label for="Sunrise_Sunset">Sunrise or Sunset?:</label>
-        <select id="Sunrise_Sunset" name="Sunrise_Sunset" >
-            <option value="Sunrise">Sunrise</option>
-            <option value="Sunset">Sunset</option>
-        </select>
         
         <label for="Weather">Weather:</label>
         <select id="Weather" name="Weather" >
@@ -183,7 +180,7 @@
     <div id='geocoder-container'></div>
   </main>
   <script>
-    mapboxgl.accessToken = '';//put accessToken here
+    mapboxgl.accessToken = 'pk.eyJ1Ijoia2FnZXJvdS1tYXRjaGEtbGF0dGUiLCJhIjoiY2t2cXFlNmhmMDBpajJ1bHlkeHVxdDFpOCJ9.kzvIYDL7iAoiwrp4Qi_6Kg';//put accessToken here
 
     
 

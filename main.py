@@ -44,8 +44,10 @@ def get_predict():
         signal = convertNum(request.form['Traffic_Signal'])
         stop = convertNum(request.form['Stop'])
         junction = convertNum(request.form['Junction'])
-        sunriseset = convertNum(request.form['Sunrise_Sunset'])
+        sunriseset = get_sunrise_sunset_status()
+        Twilight = is_twilight()
         weather = request.form['Weather']
+        visibility = request.form['visibility']
 
         isClear, isCloud, isSnowy, israiny = convertWeather(weather)
         
@@ -106,10 +108,15 @@ def get_predict():
         print(precipitation)
         # print("天気：", weather_type)
 
+        StartDec = is_december()
+        StartJan = is_jan()
+        StartH = get_hh() 
+
         isWeekend = check_weekday_or_weekend()
         print(isWeekend)
-        
+        # pred = prediction(lng, lat, crossing, pressure, signal, temperature, StartDec, StartH, stop, humidity, StartJan, junction, isClear, wind_speed, visibility, Twilight, isCloud, sunriseset, isWeekend, precipitation, isSnowy, israiny)
         pred = [(lng, lat, 1)]
+        print(lng, lat, crossing, pressure, signal, temperature, StartDec, StartH, stop, humidity, StartJan, junction, isClear, wind_speed, visibility, Twilight, isCloud, sunriseset, isWeekend, precipitation, isSnowy, israiny)
         return render_template('predict.html', predicts = pred)
 
 def convertNum(input):
@@ -157,15 +164,63 @@ def check_weekday_or_weekend():
         return 0
     else:  # 5または6は週末
         return 1
+    
 def getPrecipitation(data):
-    precipitation = data["rain"]["1h"]
-    if(precipitation != None):
-        return precipitation
+    try:
+        precipitation = data["rain"]["1h"]
+        if(precipitation != None):
+            return precipitation
+        else:
+            return 0
+    except:
+        return 0
+
+
+def is_december():
+    current_month = datetime.now().month
+    if(current_month == 12):
+        output = 1
+    else:
+        output = 0
+    return output 
+
+
+def is_jan():
+    current_month = datetime.now().month
+    
+    if(current_month == 1):
+        output = 1
+    else:
+        output = 0
+    return output
+
+
+def get_hh():
+    current_time = datetime.now().time()
+    current_hour = current_time.hour
+    return current_hour
+
+def is_twilight():
+    current_time = datetime.now().time()
+    sunrise_time = datetime.strptime("17:00", "%H:%M").time()
+    sunset_time = datetime.strptime("18:00", "%H:%M").time()
+    if sunrise_time <= current_time < sunset_time:
+        return 1
     else:
         return 0
-   
 
-def prediction(user_input):
+
+def get_sunrise_sunset_status():
+    current_time = datetime.now().time()
+    sunrise_time = datetime.strptime("06:00", "%H:%M").time()
+    sunset_time = datetime.strptime("18:00", "%H:%M").time()
+    if sunrise_time <= current_time < sunset_time:
+        return 1
+    else:
+        return 0
+
+
+def prediction(Start_Lng, Start_Lat, Crossing, Pressure, Traffic_Signal, Temperature, Start_Month_December, Start_Hour, Stop, Humidity, Start_Month_January, Junction, Weather_Bin_Clear, Wind_Speed, Visibility, Civil_Twilight, Weather_Bin_Cloudy, Sunrise_Sunset, IsWeekend, Precipitation, Weather_Bin_Snowy, Weather_Bin_Rainy):
 
 
 
