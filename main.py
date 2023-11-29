@@ -3,6 +3,7 @@ import sqlite3
 import requests
 import json
 from datetime import datetime
+import pickle
 
 app = Flask(__name__)
 
@@ -114,8 +115,8 @@ def get_predict():
 
         isWeekend = check_weekday_or_weekend()
         print(isWeekend)
-        # pred = prediction(lng, lat, crossing, pressure, signal, temperature, StartDec, StartH, stop, humidity, StartJan, junction, isClear, wind_speed, visibility, Twilight, isCloud, sunriseset, isWeekend, precipitation, isSnowy, israiny)
-        pred = [(lng, lat, 1)]
+        pred = prediction(lng, lat, crossing, pressure, signal, temperature, StartDec, StartH, stop, humidity, StartJan, junction, isClear, wind_speed, visibility, Twilight, isCloud, sunriseset, isWeekend, precipitation, isSnowy, israiny)
+        # pred = [(lng, lat, 1)]
         print(lng, lat, crossing, pressure, signal, temperature, StartDec, StartH, stop, humidity, StartJan, junction, isClear, wind_speed, visibility, Twilight, isCloud, sunriseset, isWeekend, precipitation, isSnowy, israiny)
         return render_template('predict.html', predicts = pred)
 
@@ -221,11 +222,14 @@ def get_sunrise_sunset_status():
 
 
 def prediction(Start_Lng, Start_Lat, Crossing, Pressure, Traffic_Signal, Temperature, Start_Month_December, Start_Hour, Stop, Humidity, Start_Month_January, Junction, Weather_Bin_Clear, Wind_Speed, Visibility, Civil_Twilight, Weather_Bin_Cloudy, Sunrise_Sunset, IsWeekend, Precipitation, Weather_Bin_Snowy, Weather_Bin_Rainy):
-
-
-
-    # mlflow code
-    return(lng, lat, severity)
+    with open('model.pkl', 'rb') as model_file:
+        loaded_model = pickle.load(model_file)
+    
+    prediction = loaded_model.predict(Start_Lng, Start_Lat, Crossing, Pressure, Traffic_Signal, Temperature, Start_Month_December, Start_Hour, Stop, Humidity, Start_Month_January, Junction, Weather_Bin_Clear, Wind_Speed, Visibility, Civil_Twilight, Weather_Bin_Cloudy, Sunrise_Sunset, IsWeekend, Precipitation, Weather_Bin_Snowy, Weather_Bin_Rainy)
+    print(prediction)
+    print(type(prediction))
+    prediction = [prediction]
+    return prediction
 
 
 
