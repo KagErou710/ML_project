@@ -10,10 +10,10 @@
   <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css' type='text/css' />
   <style>
     body { margin: 0; padding: 0; }
-    #map { position: absolute; top: 25%; bottom: 0; width: 100%; height: 80%;}
+    #map { position: absolute; top: 30%; bottom: 0; width: 100%; height: 80%;}
     #geocoder-container {
             position: absolute;
-            top: 25%;
+            top: 30%;
             left: 10px;
             z-index: 1;
         }
@@ -34,70 +34,6 @@
         background-color: purple;
         color: white;
         text-align: right;
-    }
-
-    .button-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: 20px;
-    }
-
-    .button-container2 {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: 20px;
-    }
-
-    .button1 {
-        margin-bottom: 10px;
-        background-color: yellow;
-        color: black;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        cursor: pointer;
-        padding: 20px;
-        border: 2px solid #ffa500;
-    }
-
-    .button2 {
-        margin-bottom: 10px;
-        background-color: yellow;
-        color: black;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        cursor: pointer;
-        padding: 20px;
-        border: 2px solid #ff5100;
-    }
-
-    .button3 {
-        margin-bottom: 10px;
-        background-color: yellow;
-        color: black;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        cursor: pointer;
-        padding: 20px;
-        border: 2px solid #ffa500;
-        width: 10%;
-    }
-
-    .button4 {
-        margin-bottom: 10px;
-        background-color: yellow;
-        color: black;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        cursor: pointer;
-        padding: 20px;
-        border: 2px solid #ff5100;
-        width: 10%;
     }
 
     .text-container {
@@ -127,55 +63,62 @@
     </div>
   </header>
   <main>
-      <h1>Execute Python Code</h1>
-      <form action="/predict" method="post">
-        <label for='latitude'>Latitude:</label>
-        <input type='text' id='latitude' name='latitude' required>
+    <div style="display: flex; width: 100%;">
+        <div id = "left" style="width: 50%;">
+            <h1>Execute Python Code</h1>
+            <form action="/predict" method="post">
+                <label for='latitude'>Latitude:</label>
+                <input type='text' id='latitude' name='latitude' required style='border: 1px solid black;'>
 
-        <label for='user_input'>Longitude:</label>
-        <input type='text' id='longitude' name='longitude' required>
+                <label for='user_input'>Longitude:</label>
+                <input type='text' id='longitude' name='longitude' required style='border: 1px solid black;'>
 
-        <label for='user_input'>Visibility(km):</label>
-        <input type='text' id='visibility' name='visibility' required>
+                <label for='user_input'>Visibility(km):</label>
+                <input type='text' id='visibility' name='visibility' required style='border: 1px solid black;'>
+                <br>
+                
+                <label for="crossing">crossing?:</label>
+                <select id="crossing" name="crossing" style='border: 2px solid black; margin-right: 10px;'>
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                </select>
 
-        <label for="crossing">crossing?:</label>
-        <select id="crossing" name="crossing" >
-            <option value="No">No</option>
-            <option value="Yes">Yes</option>
-        </select>
+                <label for="Traffic_Signal">Traffic_Signal?:</label>
+                <select id="Traffic_Signal" name="Traffic_Signal" style='border: 2px solid black; margin-right: 10px;'>
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                </select>
 
-        <label for="Traffic_Signal">Traffic_Signal?:</label>
-        <select id="Traffic_Signal" name="Traffic_Signal" >
-            <option value="No">No</option>
-            <option value="Yes">Yes</option>
-        </select>
+                <label for="Stop">Any Stops?:</label>
+                <select id="Stop" name="Stop" style='border: 2px solid black; margin-right: 10px;'>
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                </select>
 
-        <label for="Stop">Any Stops?:</label>
-        <select id="Stop" name="Stop" >
-            <option value="No">No</option>
-            <option value="Yes">Yes</option>
-        </select>
-
-        <label for="Junction">Traffic Jams?:</label>
-        <select id="Junction" name="Junction" >
-            <option value="No">No</option>
-            <option value="Yes">Yes</option>
-        </select>
-        
-        <label for="Weather">Weather:</label>
-        <select id="Weather" name="Weather" >
-            <option value="Clear">Clear</option>
-            <option value="Cloudy">Cloudy</option>
-            <option value="Snowy">Snowy</option>
-            <option value="Rainy">Rainy</option>
-        </select>
+                <label for="Junction">Traffic Jams?:</label>
+                <select id="Junction" name="Junction" style='border: 2px solid black; margin-right: 10px;'>
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                </select>
+                
+                <label for="Weather">Weather:</label>
+                <select id="Weather" name="Weather" style='border: 2px solid black; margin-right: 10px;'>
+                    <option value="Clear">Clear</option>
+                    <option value="Cloudy">Cloudy</option>
+                    <option value="Snowy">Snowy</option>
+                    <option value="Rainy">Rainy</option>
+                </select>
 
 
-        <button type="submit">Execute</button>
-    </form>
-    <button onclick="getCurrentLocation()">Get Current Location</button>
-    <p id="coordinates"></p>
-
+                <button type="submit" style='border: 3px solid red; margin-right: 10px;'>Execute</button>
+            </form>
+            <br>
+            <button onclick="getCurrentLocation()" style='border: 3px solid blue;'>Get Current Location</button>
+            <p id="coordinates"></p>
+        </div>
+        <div id="data-container" style="width: 50%; border: 2px solid black; margin-right: 10px;">
+        </div>
+    </div>
     <div id='map'></div>
     <div id='geocoder-container'></div>
   </main>
@@ -187,11 +130,12 @@
     var map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11', 
-      center: [100.53125, 13.75], 
-      zoom: 12 
+      center: [-99.262, 41.154], 
+      zoom: 4 
     });
 
     var predicts = {{ predicts | tojson | safe }};
+    var data = {{ data | tojson | safe }};
 
     var geocoder = new MapboxGeocoder({
             accessToken: mapboxgl.accessToken,
@@ -245,24 +189,62 @@
         document.getElementById('longitude').value = longitude;
       }
 
+
+    
+
     if(predicts != null){
-      var coordinatesList = predicts.map(function(predict) {
-        return {
-          lng: predict[0],
-          lat: predict[1],
-          severity: predict[2]
-        };
-      });
-      map.on('load', function () {
-      coordinatesList.forEach(function (coordinates) {
-        var circleLayerId = 'circle-' + coordinates.lng + '-' + coordinates.lat;
-        var color = getColor(coordinates.severity);
-        map.flyTo({
-        center: [coordinates.lng, coordinates.lat],
-        zoom: 12,
-        speed: 1.5,
-        essential: true
-      });
+        var coordinatesList = predicts.map(function(predict) {
+            return {
+            lng: predict[0],
+            lat: predict[1],
+            severity: predict[2]
+            };
+        });
+        var past_data = data.map(function(temp_data) {
+            return {
+            lng: temp_data[0],
+            lat: temp_data[1],
+            cross: temp_data[2],
+            pressure: temp_data[3],
+            signal: temp_data[4],
+            temperature:temp_data[5], 
+            stop:temp_data[6],
+            humidity:temp_data[7],
+            junction:temp_data[8],
+            wind_speed:temp_data[9],
+            visibility:temp_data[10],
+            twilight:temp_data[11], 
+            sunriseset:temp_data[12], 
+            precipitation:temp_data[13],
+            Weather:temp_data[14]
+            };
+        });
+        var dataContainer = document.getElementById('data-container');
+        past_data.forEach(function (data) {
+            var dataDiv = document.createElement('div');
+            dataDiv.innerHTML = `
+                <p>Longitude: ${data.lng}, Latitude: ${data.lat}</p>
+                <p>Cross: ${data.cross}, Pressure: ${data.pressure}, Signal: ${data.signal}</p>
+                <p>Temperature: ${data.temperature}, Stop: ${data.stop}, Humidity: ${data.humidity}</p>
+                <p>Junction: ${data.junction}, Wind Speed: ${data.wind_speed}, Visibility: ${data.visibility}</p>
+                <p>Twi-light: ${data.twilight}, Sunrise/Sunset: ${data.sunriseset}, Precipitation: ${data.precipitation}</p>
+                <p>Weather: ${data.Weather}</p>
+                <hr>
+            `;
+            dataContainer.appendChild(dataDiv);
+        });
+        map.on('load', function () {
+        coordinatesList.forEach(function (coordinates) {
+            var circleLayerId = 'circle-' + coordinates.lng + '-' + coordinates.lat;
+            var color = getColor(coordinates.severity);
+            map.flyTo({
+            center: [coordinates.lng, coordinates.lat],
+            zoom: 12,
+            speed: 1.5,
+            essential: true
+        });
+        
+        
         map.addLayer({
             'id': circleLayerId,
             'type': 'circle',

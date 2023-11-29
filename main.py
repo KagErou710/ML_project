@@ -4,37 +4,22 @@ import requests
 import json
 from datetime import datetime
 import pickle
+import pandas as pd
 
 app = Flask(__name__)
 
-# def predict_accidents():
-#     conn = sqlite3.connect('ml_db.db')
-#     cursor = conn.cursor()
-#     cursor.execute('SELECT a_lng, a_lat, severity FROM Accidents')
-#     coordinates = cursor.fetchall()
-#     conn.close()
-#     return coordinates
 
 @app.route('/')
 def home():
     return render_template('index.html')
 
-
-@app.route('/map')
-def index():
-    return render_template('home.html')
-
 @app.route('/predict')
 def predict_page():
-    return render_template('predict.html', predicts = None)
+    return render_template('predict.html', predicts = None, data = None)
 
 @app.route('/statistics')
 def statistics_page():
     return render_template('statistics.html')
-
-@app.route('/test')
-def test_page():
-    return render_template('test.html')
 
 @app.route('/predict', methods=['POST'])
 def get_predict():
@@ -49,76 +34,41 @@ def get_predict():
         Twilight = is_twilight()
         weather = request.form['Weather']
         visibility = request.form['visibility']
-
         isClear, isCloud, isSnowy, israiny = convertWeather(weather)
-        
-
-        # data = prediction(user_input)
-        print(lng)
-        print(lat)
-        print(crossing)
-        print(signal)
-        print(stop)
-        print(junction)
-        print(sunriseset)
-        print(isClear)
-        print(isCloud)
-        print(isSnowy)
-        print(israiny)
 
         api_key = "76991990d4912e014dec46c9f8e4da4c"
 
-        # 現在地の緯度と経度を取得します。
-
-        # OpenWeatherMap APIにリクエストを送信します。
         url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lng}&appid={api_key}"
         response = requests.get(url)
 
-        # ステータスコードを確認します。
+
         if response.status_code != 200:
-            print("APIリクエストに失敗しました。")
-            exit()
+            print("API request fail")
+        
+            data = json.loads(response.content)
 
-        # 応答をJSONとしてデコードします。
-        data = json.loads(response.content)
+            precipitation = getPrecipitation(data)
+            pressure = data["main"]["pressure"]*2.54
+            temperature = data["main"]["temp"]
+            humidity = data["main"]["humidity"]
+            wind_speed = data["wind"]["speed"]*3.6
 
-        # 降水量を取得します。
-        precipitation = getPrecipitation(data)
+        else:
+            precipitation = 100
 
-        # 他の天気情報を取得します。
-        pressure = data["main"]["pressure"]*2.54
-        temperature = data["main"]["temp"]
-        humidity = data["main"]["humidity"]
-        wind_speed = data["wind"]["speed"]*3.6
-
-        # 天気を定義します。
-        # weather_type = ""
-        # if data["weather"][0]["description"] == "clear sky":
-        #     weather_type = "晴れ"
-        # elif data["weather"][0]["description"] == "snow":
-        #     weather_type = "雪"
-        # elif data["weather"][0]["description"] == "rain":
-        #     weather_type = "雨"
-
-        # 情報を表示します。
-        print("現在の天気情報：")
-        print("圧力：", pressure, "cmHg")
-        print("温度：", temperature, "℃")
-        print("湿度：", humidity, "%")
-        print("風速：", wind_speed, "m/s")
-        print(precipitation)
-        # print("天気：", weather_type)
+            pressure = 101325
+            temperature = 15
+            humidity = 75
+            wind_speed = 14.4
 
         StartDec = is_december()
         StartJan = is_jan()
         StartH = get_hh() 
 
         isWeekend = check_weekday_or_weekend()
-        print(isWeekend)
         pred = prediction(lng, lat, crossing, pressure, signal, temperature, StartDec, StartH, stop, humidity, StartJan, junction, isClear, wind_speed, visibility, Twilight, isCloud, sunriseset, isWeekend, precipitation, isSnowy, israiny)
-        # pred = [(lng, lat, 1)]
-        print(lng, lat, crossing, pressure, signal, temperature, StartDec, StartH, stop, humidity, StartJan, junction, isClear, wind_speed, visibility, Twilight, isCloud, sunriseset, isWeekend, precipitation, isSnowy, israiny)
-        return render_template('predict.html', predicts = pred)
+        past_data = [(lng, lat, request.form['crossing'], pressure, request.form['Traffic_Signal'], temperature,request.form['Stop'], humidity, request.form['Junction'], wind_speed, request.form['visibility'], reverseNum(Twilight), reverseNum(sunriseset), precipitation, request.form['Weather'])]
+        return render_template('predict.html', predicts = pred, data = past_data)
 
 def convertNum(input):
     if(input == 'Yes'):
@@ -129,6 +79,12 @@ def convertNum(input):
         return 1
     else:
         return 0
+    
+def reverseNum(input):
+    if(input == 1):
+        return 'Yes'
+    else:
+        return 'No'
     
 def convertWeather(input, isClear = 0, isCloud = 0, isSnowy = 0, israiny = 0):
     if(input == 'Clear'):
@@ -154,16 +110,12 @@ def convertWeather(input, isClear = 0, isCloud = 0, isSnowy = 0, israiny = 0):
     return isClear, isCloud, isSnowy, israiny
 
 def check_weekday_or_weekend():
-    # 現在の日付を取得
     current_date = datetime.now()
-
-    # 曜日を取得 (0: Monday, 1: Tuesday, ..., 6: Sunday)
     day_of_week = current_date.weekday()
 
-    # 判別
-    if day_of_week < 5:  # 0から4は平日
+    if day_of_week < 5:
         return 0
-    else:  # 5または6は週末
+    else:
         return 1
     
 def getPrecipitation(data):
@@ -224,15 +176,55 @@ def get_sunrise_sunset_status():
 def prediction(Start_Lng, Start_Lat, Crossing, Pressure, Traffic_Signal, Temperature, Start_Month_December, Start_Hour, Stop, Humidity, Start_Month_January, Junction, Weather_Bin_Clear, Wind_Speed, Visibility, Civil_Twilight, Weather_Bin_Cloudy, Sunrise_Sunset, IsWeekend, Precipitation, Weather_Bin_Snowy, Weather_Bin_Rainy):
     with open('model.pkl', 'rb') as model_file:
         loaded_model = pickle.load(model_file)
+
+    input = pd.DataFrame({
+        'Start_Lat': [Start_Lat],
+        'Start_Lng': [Start_Lng],
+        'Humidity(%)': [Humidity],
+        'Crossing': [Crossing],
+        'Junction': [Junction],
+        'Stop': [Stop],
+        'Traffic_Signal': [Traffic_Signal],
+        'Sunrise_Sunset': [Sunrise_Sunset],
+        'Civil_Twilight': [Civil_Twilight],
+        'Start_Hour': [Start_Hour],
+        'IsWeekend': [IsWeekend],
+        'Temperature(C)': [Temperature],
+        'Pressure(cm)': [Pressure],
+        'Precipitation(cm)': [Precipitation],
+        'Visibility(km)': [Visibility],
+        'Wind_Speed(kmph)': [Wind_Speed],
+        'Weather_Bin_Clear': [Weather_Bin_Clear],
+        'Weather_Bin_Cloudy': [Weather_Bin_Cloudy],
+        'Weather_Bin_Snowy': [Weather_Bin_Snowy],
+        'Weather_Bin_Rainy': [Weather_Bin_Rainy],
+        'Start_Month_December': [Start_Month_December],
+        'Start_Month_January': [Start_Month_January]        
+    })
+
+
+    prediction = loaded_model.predict(input)
+    print("output : ", prediction)
+    print("data type : ", type(prediction))
+    temp_list = prediction.tolist()
+    severity = temp_list[0]
+    prediction = [(Start_Lng, Start_Lat, severity)]
+
+
+#     conn = sqlite3.connect('ml_db.db')
+#     cursor = conn.cursor()
+#     cursor.execute('''
+#     INSERT INTO AccidentData (Start_Lng, Start_Lat, Crossing, Pressure, Traffic_Signal, Temperature, Start_Month_December, Start_Hour, Stop, Humidity, Start_Month_January, Junction, Weather_Bin_Clear, Wind_Speed, Visibility, Civil_Twilight, Weather_Bin_Cloudy, Sunrise_Sunset, IsWeekend, Precipitation, Weather_Bin_Snowy, Weather_Bin_Rainy, Severity)
+#     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+# ''', (Start_Lng, Start_Lat, Crossing, Pressure, Traffic_Signal, Temperature, Start_Month_December, Start_Hour, Stop, Humidity, Start_Month_January, Junction, Weather_Bin_Clear, Wind_Speed, Visibility, Civil_Twilight, Weather_Bin_Cloudy, Sunrise_Sunset, IsWeekend, Precipitation, Weather_Bin_Snowy, Weather_Bin_Rainy, severity))
     
-    prediction = loaded_model.predict(Start_Lng, Start_Lat, Crossing, Pressure, Traffic_Signal, Temperature, Start_Month_December, Start_Hour, Stop, Humidity, Start_Month_January, Junction, Weather_Bin_Clear, Wind_Speed, Visibility, Civil_Twilight, Weather_Bin_Cloudy, Sunrise_Sunset, IsWeekend, Precipitation, Weather_Bin_Snowy, Weather_Bin_Rainy)
-    print(prediction)
-    print(type(prediction))
-    prediction = [prediction]
+#     conn.commit()
+#     conn.close()
+
+
+
     return prediction
 
 
-
-    
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8080)
