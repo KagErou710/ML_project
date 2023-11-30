@@ -77,7 +77,7 @@
                 <input type='text' id='visibility' name='visibility' required style='border: 1px solid black;'>
                 <br>
                 
-                <label for="crossing">crossing?:</label>
+                <label for="crossing">Crossing?:</label>
                 <select id="crossing" name="crossing" style='border: 2px solid black; margin-right: 10px;'>
                     <option value="No">No</option>
                     <option value="Yes">Yes</option>
@@ -95,7 +95,7 @@
                     <option value="Yes">Yes</option>
                 </select>
 
-                <label for="Junction">Traffic Jams?:</label>
+                <label for="Junction">Junction?:</label>
                 <select id="Junction" name="Junction" style='border: 2px solid black; margin-right: 10px;'>
                     <option value="No">No</option>
                     <option value="Yes">Yes</option>
@@ -162,13 +162,9 @@
     }
 
     map.on('click', function (e) {
-      // クリックした位置の緯度経度を取得
       var lngLat = e.lngLat;
-
-      // 緯度経度をコンソールに表示
       console.log('Clicked at:', lngLat);
 
-      // InputFieldに緯度経度をセット
       document.getElementById('latitude').value = lngLat.lat;
       document.getElementById('longitude').value = lngLat.lng;
     });
