@@ -1,0 +1,16 @@
+digest: 8251e011
+name: dataset
+profile: '{"num_rows": 2742922, "num_elements": 60344284}'
+schema: '{"mlflow_colspec": [{"type": "double", "name": "Start_Lat"}, {"type": "double",
+  "name": "Start_Lng"}, {"type": "double", "name": "Humidity(%)"}, {"type": "long",
+  "name": "Crossing"}, {"type": "long", "name": "Junction"}, {"type": "long", "name":
+  "Stop"}, {"type": "long", "name": "Traffic_Signal"}, {"type": "long", "name": "Sunrise_Sunset"},
+  {"type": "long", "name": "Civil_Twilight"}, {"type": "long", "name": "Start_Hour"},
+  {"type": "long", "name": "IsWeekend"}, {"type": "double", "name": "Temperature(C)"},
+  {"type": "double", "name": "Pressure(cm)"}, {"type": "double", "name": "Precipitation(cm)"},
+  {"type": "double", "name": "Visibility(km)"}, {"type": "double", "name": "Wind_Speed(kmph)"},
+  {"type": "long", "name": "Weather_Bin_Clear"}, {"type": "long", "name": "Weather_Bin_Cloudy"},
+  {"type": "long", "name": "Weather_Bin_Rainy"}, {"type": "long", "name": "Weather_Bin_Snowy"},
+  {"type": "long", "name": "Start_Month_December"}, {"type": "long", "name": "Start_Month_January"}]}'
+source: '{"uri": ""}'
+source_type: local

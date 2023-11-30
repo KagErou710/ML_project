@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/PREDATOR/Music/ML_project/mlflowruns/951222295595621275/51f59c67b793469a945e7a5445291631/artifacts
+end_time: 1701356367614
+entry_point_name: ''
+experiment_id: '951222295595621275'
+lifecycle_stage: active
+run_id: 51f59c67b793469a945e7a5445291631
+run_name: Model Random Forest
+run_uuid: 51f59c67b793469a945e7a5445291631
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1701356177732
+status: 3
+tags: []
+user_id: ML_Project

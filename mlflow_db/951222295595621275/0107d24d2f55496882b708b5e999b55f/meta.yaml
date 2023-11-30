@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/PREDATOR/Music/ML_project/mlflowruns/951222295595621275/0107d24d2f55496882b708b5e999b55f/artifacts
+end_time: 1701356733617
+entry_point_name: ''
+experiment_id: '951222295595621275'
+lifecycle_stage: active
+run_id: 0107d24d2f55496882b708b5e999b55f
+run_name: Grid-CV-RF
+run_uuid: 0107d24d2f55496882b708b5e999b55f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1701356717468
+status: 4
+tags: []
+user_id: ML_Project

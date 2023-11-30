@@ -1,20 +1,17 @@
-# Use an official Python runtime as a parent image
-FROM python:3.8-slim
-
-# Set the working directory in the container
+FROM python:3.11.4-bookworm
+ 
 WORKDIR /app
-
-# Copy the current directory contents into the container at /app
+RUN pip3 install flask
+RUN pip3 install pandas
+RUN pip3 install pandas
+RUN pip3 install numpy
+RUN pip3 install scikit-learn
+RUN pip3 install matplotlib
+RUN pip3 install requests
+RUN pip3 install mlflow
+EXPOSE 8080
+ 
 COPY . /app
-
-# Install any needed packages specified in requirements.txt
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
-
-# Expose the port the app runs on
-EXPOSE 5000
-
-# Define environment variable for Flask
-ENV FLASK_APP=app.py
-
-# Run app.py when the container launches
-CMD ["flask", "run", "--host=0.0.0.0"]
+# RUN pip3 install -r requirements.txt
+ 
+CMD tail -f /dev/null

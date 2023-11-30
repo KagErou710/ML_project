@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/PREDATOR/Music/ML_project/mlflowruns/951222295595621275/f1d9ed119779427baa4c98b16ca511b4/artifacts
+end_time: 1701356177709
+entry_point_name: ''
+experiment_id: '951222295595621275'
+lifecycle_stage: active
+run_id: f1d9ed119779427baa4c98b16ca511b4
+run_name: Model Logistic Regression
+run_uuid: f1d9ed119779427baa4c98b16ca511b4
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1701356144589
+status: 3
+tags: []
+user_id: ML_Project
