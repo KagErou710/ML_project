@@ -56,7 +56,7 @@ def get_predict():
         else:
             precipitation = 100
 
-            pressure = 101325
+            pressure = 40
             temperature = 15
             humidity = 75
             wind_speed = 14.4
